@@ -1,0 +1,81 @@
+ASSIGNMENT-2
+
+1. Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after rain.
+
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int n = height.size();
+        if (n == 0) return 0;
+       
+        int left = 0, right = n - 1;
+        int leftMax = 0, rightMax = 0;
+        int water = 0;
+
+
+        while (left < right) {
+            if (height[left] < height[right]) {
+                if (height[left] >= leftMax) {
+                    leftMax = height[left];
+                } else {
+                    water += leftMax - height[left];
+                }
+                ++left;
+            } else {
+
+
+                if (height[right] >= rightMax) {
+                    rightMax = height[right];
+                } else {
+                    water += rightMax - height[right];
+                }
+                --right;
+            }
+        }
+       
+        return water;
+    }
+};
+
+
+2. Given the root of a binary tree, flatten the tree into a "linked list":
+The "linked list" should use the same TreeNode class where the right child pointer points to the next node in the list and the left child pointer is always null.
+The "linked list" should be in the same order as a pre-order traversal of the binary tree.
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        TreeNode* current = root;
+
+
+        while (current) {
+            if (current->left) {
+                // Find the rightmost node in the left subtree
+                TreeNode* predecessor = current->left;
+                while (predecessor->right) {
+                    predecessor = predecessor->right;
+                }
+
+
+                // Connect the rightmost node to the current right subtree
+                predecessor->right = current->right;
+
+
+                // Move the left subtree to the right and set left to nullptr
+                current->right = current->left;
+                current->left = nullptr;
+            }
+
+
+            // Move to the next node in the pre-order sequence
+            current = current->right;
+        }
+    }
+};
+
+
+
